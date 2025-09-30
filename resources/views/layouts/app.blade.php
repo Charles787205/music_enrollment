@@ -405,6 +405,7 @@
                     <span class="nav-text">Courses</span>
                 </a>
 
+                @if(auth()->user()->isStudent())
                 <a href="{{ route('course-enrollments.index') }}"
                     class="nav-link {{ request()->routeIs('course-enrollments.*') ? 'active' : '' }}">
                     <div class="nav-icon">
@@ -420,6 +421,7 @@
                     </div>
                     <span class="nav-text">My Borrowed Instruments</span>
                 </a>
+                @endif
 
                 @if(auth()->user()->isStudent())
                 <a href="{{ route('instrument-borrows.create') }}"
@@ -497,12 +499,30 @@
                     </div>
                     <span class="nav-text">Manage Instrument Borrows</span>
                 </a>
+
+                <a href="{{ route('employee.payments') }}"
+                    class="nav-link {{ request()->routeIs('employee.payments*') ? 'active' : '' }}">
+                    <div class="nav-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+                    <span class="nav-text">Collect Payments</span>
+                </a>
             </div>
             @endif
 
             <!-- Logout Section -->
             <div class="nav-section" style="margin-top: auto; padding-bottom: 1rem;">
                 <div class="nav-section-title">Account</div>
+
+                <!-- Change Password Link -->
+                <a href="{{ route('password.change') }}"
+                    class="nav-link {{ request()->routeIs('password.change*') ? 'active' : '' }}">
+                    <div class="nav-icon">
+                        <i class="bi bi-key"></i>
+                    </div>
+                    <span class="nav-text">Change Password</span>
+                </a>
+
                 <form method="POST" action="{{ route('logout') }}" class="d-inline w-100">
                     @csrf
                     <button type="submit" class="nav-link logout-btn w-100 text-start border-0 bg-transparent"
@@ -544,12 +564,15 @@
                                 <i class="bi bi-house-door me-2"></i> Dashboard
                             </a></li>
                         @endif
+
+                        @if(auth()->user()->isStudent())
                         <li><a class="dropdown-item" href="{{ route('course-enrollments.index') }}">
                                 <i class="bi bi-journal-check me-2"></i> My Course Enrollments
                             </a></li>
                         <li><a class="dropdown-item" href="{{ route('instrument-borrows.index') }}">
                                 <i class="bi bi-box-arrow-down me-2"></i> My Borrowed Instruments
                             </a></li>
+                        @endif
                         <li>
                             <hr class="dropdown-divider">
                         </li>

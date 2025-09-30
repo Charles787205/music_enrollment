@@ -66,6 +66,16 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
+            'name' => 'Demo Teacher - Piano',
+            'email' => 'demo_teacher@musicschool.com',
+            'password' => Hash::make('password123'),
+            'phone' => '555-DEMO',
+            'user_type' => 'teacher',
+            'is_enrolled' => false,
+            'email_verified_at' => now(),
+        ]);
+
+        User::create([
             'name' => 'Demo Student',
             'email' => 'demo_student@musicschool.com',
             'password' => Hash::make('password123'),

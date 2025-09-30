@@ -152,6 +152,16 @@ class AdminController extends Controller
     }
 
     /**
+     * Show a specific instrument borrow/enrollment.
+     */
+    public function showEnrollment(InstrumentBorrow $enrollment)
+    {
+        $enrollment->load(['user', 'instrument']);
+        
+        return view('admin.enrollments.show', compact('enrollment'));
+    }
+
+    /**
      * Update instrument borrow status.
      */
     public function updateEnrollmentStatus(Request $request, InstrumentBorrow $enrollment)

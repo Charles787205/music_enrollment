@@ -91,7 +91,7 @@
                 <td>{{ $enrollment->created_at->format('M d, Y') }}</td>
                 <td>
                   <div class="btn-group" role="group">
-                    <a href="{{ route('enrollments.show', $enrollment) }}" class="btn btn-sm btn-outline-primary">
+                    <a href="{{ route('admin.enrollments.show', $enrollment) }}" class="btn btn-sm btn-outline-primary">
                       <i class="bi bi-eye"></i> View
                     </a>
                     <a href="{{ route('admin.users.show', $enrollment->user) }}" class="btn btn-sm btn-outline-info">

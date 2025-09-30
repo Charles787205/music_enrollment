@@ -12,17 +12,29 @@ class CourseEnrollment extends Model
     protected $fillable = [
         'user_id',
         'course_id',
+        'teacher_id',
         'status',
         'enrolled_at',
         'completed_at',
         'grade',
         'notes',
+        'total_fee',
+        'amount_paid',
+        'payment_status',
+        'payment_due_date',
+        'collected_by',
+        'payment_collected_at',
+        'payment_notes',
     ];
 
     protected $casts = [
         'enrolled_at' => 'date',
         'completed_at' => 'date',
+        'payment_due_date' => 'datetime',
+        'payment_collected_at' => 'datetime',
         'grade' => 'decimal:2',
+        'total_fee' => 'decimal:2',
+        'amount_paid' => 'decimal:2',
     ];
 
     /**
@@ -39,6 +51,22 @@ class CourseEnrollment extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    /**
+     * Get the teacher assigned to this enrollment.
+     */
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    /**
+     * Get the employee who collected the payment.
+     */
+    public function collector()
+    {
+        return $this->belongsTo(User::class, 'collected_by');
     }
 
     /**
@@ -63,6 +91,43 @@ class CourseEnrollment extends Model
     public function isPending()
     {
         return $this->status === 'pending';
+    }
+
+    /**
+     * Check if payment is fully paid.
+     */
+    public function isFullyPaid()
+    {
+        return $this->payment_status === 'paid';
+    }
+
+    /**
+     * Check if payment is overdue.
+     */
+    public function isPaymentOverdue()
+    {
+        return $this->payment_due_date && 
+               $this->payment_due_date->isPast() && 
+               !$this->isFullyPaid();
+    }
+
+    /**
+     * Get remaining balance.
+     */
+    public function getRemainingBalance()
+    {
+        return $this->total_fee - $this->amount_paid;
+    }
+
+    /**
+     * Get payment completion percentage.
+     */
+    public function getPaymentPercentage()
+    {
+        if (!$this->total_fee || $this->total_fee == 0) {
+            return 100;
+        }
+        return min(100, ($this->amount_paid / $this->total_fee) * 100);
     }
 
     /**

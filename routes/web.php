@@ -8,9 +8,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseEnrollmentController;
+use App\Http\Controllers\GuestEnrollmentController;
+use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
-// Redirect root to login for unauthenticated users, otherwise to appropriate dashboard
+// Landing page for all visitors
 Route::get('/', function () {
     if (auth()->check()) {
         if (auth()->user()->isAdmin()) {
@@ -21,8 +24,8 @@ Route::get('/', function () {
             return redirect()->route('courses.index');
         }
     }
-    return redirect()->route('login');
-});
+    return view('welcome');
+})->name('home');
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -31,8 +34,20 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Password Change Routes (for authenticated users)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/change-password', [PasswordController::class, 'show'])->name('password.change');
+    Route::post('/change-password', [PasswordController::class, 'update'])->name('password.update')->withoutMiddleware(['password.required']);
+});
+
 // Public routes - these work without authentication
 Route::get('/instruments', [InstrumentController::class, 'index'])->name('instruments.index');
+
+// Guest enrollment routes (no authentication required)
+Route::get('/enroll', [GuestEnrollmentController::class, 'create'])->name('guest.enroll');
+Route::get('/enroll/{course}', [GuestEnrollmentController::class, 'create'])->name('guest.enroll.course');
+Route::post('/enroll', [GuestEnrollmentController::class, 'store'])->name('guest.enroll.store');
+Route::get('/enrollment-success', [GuestEnrollmentController::class, 'success'])->name('guest.enroll.success');
 
 // Admin instrument management routes (must be BEFORE parameterized routes)
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -58,7 +73,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     // Enrollment Management
     Route::get('/enrollments', [AdminController::class, 'enrollments'])->name('enrollments');
+    Route::get('/enrollments/{enrollment}', [AdminController::class, 'showEnrollment'])->name('enrollments.show');
     Route::patch('/enrollments/{enrollment}/status', [AdminController::class, 'updateEnrollmentStatus'])->name('enrollments.update-status');
+    
+    // Payment Reports
+    Route::get('/payments/reports', [PaymentController::class, 'reports'])->name('payments.reports');
 });
 
 // Employee Routes
@@ -72,6 +91,12 @@ Route::middleware(['auth', 'employee'])->prefix('employee')->name('employee.')->
     // Instrument Borrow Management
     Route::get('/enrollments', [EmployeeController::class, 'enrollments'])->name('enrollments');
     Route::patch('/enrollments/{enrollment}/status', [EmployeeController::class, 'updateEnrollmentStatus'])->name('enrollments.update-status');
+    
+    // Payment Collection
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+    Route::get('/payments/{enrollment}', [PaymentController::class, 'show'])->name('payments.show');
+    Route::post('/payments/{enrollment}/collect', [PaymentController::class, 'collect'])->name('payments.collect');
+    Route::get('/payments/{enrollment}/history', [PaymentController::class, 'history'])->name('payments.history');
 });
 
 // Protected routes (require authentication)

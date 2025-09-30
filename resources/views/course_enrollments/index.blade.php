@@ -40,6 +40,7 @@
                             <thead>
                                 <tr>
                                     <th>Course</th>
+                                    <th>Teacher</th>
                                     <th>Status</th>
                                     <th>Enrolled Date</th>
                                     <th>Grade</th>
@@ -68,6 +69,25 @@
                                                     class="text-muted">{{ Str::limit($enrollment->course->description, 50) }}</small>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        @if($enrollment->teacher)
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" 
+                                                style="width: 32px; height: 32px;">
+                                                <i class="bi bi-person-fill text-white" style="font-size: 14px;"></i>
+                                            </div>
+                                            <div>
+                                                <strong>{{ $enrollment->teacher->name }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ $enrollment->teacher->email }}</small>
+                                            </div>
+                                        </div>
+                                        @else
+                                        <span class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>Teacher assignment pending
+                                        </span>
+                                        @endif
                                     </td>
                                     <td>
                                         <span class="badge bg-{{ $enrollment->statusBadgeClass }}">

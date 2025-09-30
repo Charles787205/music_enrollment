@@ -33,6 +33,12 @@ class AuthController extends Controller
 
             $user = Auth::user();
             
+            // Check if user needs to change password
+            if ($user->password_change_required) {
+                return redirect()->route('password.change')
+                    ->with('warning', 'You must change your temporary password before continuing.');
+            }
+            
             // Redirect based on user role
             if ($user->isAdmin()) {
                 return redirect()->intended(route('admin.dashboard'))

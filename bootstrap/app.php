@@ -14,7 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'employee' => \App\Http\Middleware\EmployeeMiddleware::class,
+            'password.required' => \App\Http\Middleware\CheckPasswordChangeRequired::class,
         ]);
+        
+        // Temporarily comment out the password check middleware
+        // $middleware->appendToGroup('auth', [
+        //     \App\Http\Middleware\CheckPasswordChangeRequired::class,
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

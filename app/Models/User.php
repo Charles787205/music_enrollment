@@ -28,6 +28,7 @@ class User extends Authenticatable
         'emergency_contact_phone',
         'user_type',
         'is_enrolled',
+        'password_change_required',
     ];
 
     /**
@@ -101,6 +102,32 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the course enrollments where this user is the teacher.
+     */
+    public function teachingEnrollments()
+    {
+        return $this->hasMany(CourseEnrollment::class, 'teacher_id');
+    }
+
+    /**
+     * Get the students this teacher is teaching.
+     */
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'course_enrollments', 'teacher_id', 'user_id')
+                    ->withPivot(['status', 'enrolled_at', 'completed_at', 'grade'])
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get payments collected by this employee.
+     */
+    public function collectedPayments()
+    {
+        return $this->hasMany(CourseEnrollment::class, 'collected_by');
+    }
+
+    /**
      * Get active course enrollments
      */
     public function activeCourses()
@@ -122,6 +149,14 @@ class User extends Authenticatable
     public function isEmployee()
     {
         return $this->user_type === 'employee';
+    }
+
+    /**
+     * Check if user is a teacher.
+     */
+    public function isTeacher()
+    {
+        return $this->user_type === 'teacher';
     }
 
     /**
