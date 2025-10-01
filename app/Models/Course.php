@@ -9,22 +9,82 @@ class Course extends Model
 {
     protected $fillable = [
         'title',
+        'name', // alias for title
         'description', 
+        'prerequisites',
         'image',
         'max_students',
         'current_enrolled',
         'price',
+        'fee', // alias for price
         'status',
         'start_date',
         'end_date',
-        'instructor'
+        'duration_weeks',
+        'instructor',
+        'teacher_id'
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'price' => 'decimal:2'
+        'price' => 'decimal:2',
+        'fee' => 'decimal:2'
     ];
+
+    /**
+     * Get the teacher assigned to this course.
+     */
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class, 'teacher_id');
+    }
+
+    /**
+     * Get all enrollments for this course.
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(CourseEnrollment::class);
+    }
+
+    /**
+     * Accessor for name (alias for title).
+     */
+    public function getNameAttribute()
+    {
+        return $this->attributes['name'] ?? $this->attributes['title'];
+    }
+
+    /**
+     * Mutator for name (updates title if name is set).
+     */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = $value;
+        if (!isset($this->attributes['title']) || empty($this->attributes['title'])) {
+            $this->attributes['title'] = $value;
+        }
+    }
+
+    /**
+     * Accessor for fee (alias for price).
+     */
+    public function getFeeAttribute()
+    {
+        return $this->attributes['fee'] ?? $this->attributes['price'];
+    }
+
+    /**
+     * Mutator for fee (updates price if fee is set).
+     */
+    public function setFeeAttribute($value)
+    {
+        $this->attributes['fee'] = $value;
+        if (!isset($this->attributes['price']) || empty($this->attributes['price'])) {
+            $this->attributes['price'] = $value;
+        }
+    }
 
     /**
      * Students enrolled in this course

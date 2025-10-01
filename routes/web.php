@@ -76,6 +76,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/enrollments/{enrollment}', [AdminController::class, 'showEnrollment'])->name('enrollments.show');
     Route::patch('/enrollments/{enrollment}/status', [AdminController::class, 'updateEnrollmentStatus'])->name('enrollments.update-status');
     
+    // Course Management
+    Route::get('/courses', [AdminController::class, 'courses'])->name('courses');
+    Route::get('/courses/{course}', [AdminController::class, 'showCourse'])->name('courses.show');
+    Route::put('/courses/{course}/teacher', [AdminController::class, 'updateCourseTeacher'])->name('courses.update-teacher');
+    Route::post('/courses/{course}/assign-student', [AdminController::class, 'assignStudent'])->name('courses.assign-student');
+    Route::delete('/courses/{course}/students/{student}', [AdminController::class, 'removeStudent'])->name('courses.remove-student');
+    
+    // Teacher Management
+    Route::get('/teachers', [AdminController::class, 'teachers'])->name('teachers');
+    Route::get('/teachers/create', [AdminController::class, 'createTeacher'])->name('teachers.create');
+    Route::post('/teachers', [AdminController::class, 'storeTeacher'])->name('teachers.store');
+    Route::get('/teachers/{teacher}/edit', [AdminController::class, 'editTeacher'])->name('teachers.edit');
+    Route::put('/teachers/{teacher}', [AdminController::class, 'updateTeacher'])->name('teachers.update');
+    Route::delete('/teachers/{teacher}', [AdminController::class, 'deleteTeacher'])->name('teachers.delete');
+    
     // Payment Reports
     Route::get('/payments/reports', [PaymentController::class, 'reports'])->name('payments.reports');
 });
@@ -91,6 +106,10 @@ Route::middleware(['auth', 'employee'])->prefix('employee')->name('employee.')->
     // Instrument Borrow Management
     Route::get('/enrollments', [EmployeeController::class, 'enrollments'])->name('enrollments');
     Route::patch('/enrollments/{enrollment}/status', [EmployeeController::class, 'updateEnrollmentStatus'])->name('enrollments.update-status');
+    
+    // Course Enrollment Management
+    Route::get('/course-enrollments', [EmployeeController::class, 'courseEnrollments'])->name('course-enrollments');
+    Route::patch('/course-enrollments/{courseEnrollment}/status', [EmployeeController::class, 'updateCourseEnrollmentStatus'])->name('course-enrollments.update-status');
     
     // Payment Collection
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments');

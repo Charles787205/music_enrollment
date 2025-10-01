@@ -73,9 +73,9 @@
                         <th>Student</th>
                         <th>Instrument</th>
                         <th>Status</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Total Fee</th>
+                        <th>Borrowed Date</th>
+                        <th>Due Date</th>
+                        <th>Notes</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -115,24 +115,24 @@
                             </span>
                         </td>
                         <td>
-                            @if($enrollment->start_date)
-                            {{ $enrollment->start_date->format('M d, Y') }}
+                            @if($enrollment->borrowed_at)
+                            {{ $enrollment->borrowed_at->format('M d, Y') }}
                             @else
                             <span class="text-muted">Not set</span>
                             @endif
                         </td>
                         <td>
-                            @if($enrollment->end_date)
-                            {{ $enrollment->end_date->format('M d, Y') }}
+                            @if($enrollment->due_date)
+                            {{ $enrollment->due_date->format('M d, Y') }}
                             @else
                             <span class="text-muted">Not set</span>
                             @endif
                         </td>
                         <td>
-                            @if($enrollment->total_fee)
-                            <strong>${{ number_format($enrollment->total_fee, 2) }}</strong>
+                            @if($enrollment->notes)
+                            {{ Str::limit($enrollment->notes, 50) }}
                             @else
-                            <span class="text-muted">Not set</span>
+                            <span class="text-muted">No notes</span>
                             @endif
                         </td>
                         <td>

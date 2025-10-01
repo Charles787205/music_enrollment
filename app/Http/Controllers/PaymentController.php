@@ -86,8 +86,19 @@ class PaymentController extends Controller
             'payment_notes' => $request->notes
         ]);
 
+        // Auto-enroll student when payment is fully paid
+        if ($newStatus === 'paid' && $enrollment->user->isStudent()) {
+            $enrollment->user->update([
+                'is_enrolled' => true
+            ]);
+            
+            $successMessage = 'Payment of $' . number_format($amount, 2) . ' collected successfully! Student has been automatically enrolled.';
+        } else {
+            $successMessage = 'Payment of $' . number_format($amount, 2) . ' collected successfully!';
+        }
+
         return redirect()->route('employee.payments.show', $enrollment)
-            ->with('success', 'Payment of $' . number_format($amount, 2) . ' collected successfully!');
+            ->with('success', $successMessage);
     }
 
     /**

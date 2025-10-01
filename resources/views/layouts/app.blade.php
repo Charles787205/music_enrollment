@@ -454,6 +454,22 @@
                     <span class="nav-text">Manage Users</span>
                 </a>
 
+                <a href="{{ route('admin.courses') }}"
+                    class="nav-link {{ request()->routeIs('admin.courses*') ? 'active' : '' }}">
+                    <div class="nav-icon">
+                        <i class="bi bi-book-half"></i>
+                    </div>
+                    <span class="nav-text">Manage Courses</span>
+                </a>
+
+                <a href="{{ route('admin.teachers') }}"
+                    class="nav-link {{ request()->routeIs('admin.teachers*') ? 'active' : '' }}">
+                    <div class="nav-icon">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                    <span class="nav-text">Manage Teachers</span>
+                </a>
+
                 <a href="{{ route('admin.enrollments') }}"
                     class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}">
                     <div class="nav-icon">
@@ -498,6 +514,14 @@
                         <i class="bi bi-box-arrow-down-left"></i>
                     </div>
                     <span class="nav-text">Manage Instrument Borrows</span>
+                </a>
+
+                <a href="{{ route('employee.course-enrollments') }}"
+                    class="nav-link {{ request()->routeIs('employee.course-enrollments') ? 'active' : '' }}">
+                    <div class="nav-icon">
+                        <i class="bi bi-journal-check"></i>
+                    </div>
+                    <span class="nav-text">Manage Course Enrollments</span>
                 </a>
 
                 <a href="{{ route('employee.payments') }}"

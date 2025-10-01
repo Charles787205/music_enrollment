@@ -15,6 +15,7 @@ class CourseEnrollment extends Model
         'teacher_id',
         'status',
         'enrolled_at',
+        'approved_at',
         'completed_at',
         'grade',
         'notes',
@@ -29,6 +30,7 @@ class CourseEnrollment extends Model
 
     protected $casts = [
         'enrolled_at' => 'date',
+        'approved_at' => 'datetime',
         'completed_at' => 'date',
         'payment_due_date' => 'datetime',
         'payment_collected_at' => 'datetime',
@@ -46,6 +48,14 @@ class CourseEnrollment extends Model
     }
 
     /**
+     * Get the student who enrolled in the course (alias for user).
+     */
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
      * Get the course for this enrollment.
      */
     public function course()
@@ -58,7 +68,7 @@ class CourseEnrollment extends Model
      */
     public function teacher()
     {
-        return $this->belongsTo(User::class, 'teacher_id');
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
     /**

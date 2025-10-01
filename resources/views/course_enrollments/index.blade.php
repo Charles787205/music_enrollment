@@ -73,7 +73,7 @@
                                     <td>
                                         @if($enrollment->teacher)
                                         <div class="d-flex align-items-center">
-                                            <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" 
+                                            <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center"
                                                 style="width: 32px; height: 32px;">
                                                 <i class="bi bi-person-fill text-white" style="font-size: 14px;"></i>
                                             </div>
