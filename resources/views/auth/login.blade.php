@@ -70,32 +70,29 @@
 
           <!-- Register Link -->
           <div class="text-center mt-4 pt-3 border-top">
-            <p class="text-muted mb-3">New to our Music School?</p>
+            <p class="text-muted mb-3">Welcome to our Music School!</p>
 
             <!-- Quick Action Buttons -->
             <div class="row g-2 mb-3">
-              <div class="col-6">
+              <div class="col-12">
                 <a href="{{ route('courses.index') }}" class="btn btn-success w-100">
                   <i class="bi bi-music-note me-2"></i>
-                  <span class="d-none d-sm-inline">Browse & </span>Enroll
-                </a>
-              </div>
-              <div class="col-6">
-                <a href="{{ route('register') }}" class="btn btn-outline-primary w-100">
-                  <i class="bi bi-person-plus me-2"></i>
-                  Create Account
+                  Browse Courses & Enroll
                 </a>
               </div>
             </div>
 
             <!-- Help Text -->
             <div class="small text-muted">
-              <p class="mb-1">
+              <p class="mb-2">
                 <i class="bi bi-info-circle me-1"></i>
-                You can <strong>enroll first</strong> and create your account later
+                Students can <strong>enroll directly</strong> without creating an account
               </p>
-              <p class="mb-0">
-                or <strong>create an account</strong> to track your enrollments
+              <hr class="my-3">
+              <p class="mb-0 text-center">
+                <i class="bi bi-shield-check me-1"></i>
+                Staff Member? <a href="{{ route('staff.register') }}"
+                  class="text-primary text-decoration-none fw-bold">Staff Registration</a>
               </p>
             </div>
           </div>
@@ -128,6 +125,8 @@
     background: linear-gradient(135deg, #28a745, #20c997);
     border: none;
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
   }
 
   .btn-success:hover {
@@ -140,6 +139,8 @@
     border-color: #667eea;
     color: #667eea;
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
   }
 
   .btn-outline-primary:hover {
@@ -153,6 +154,20 @@
   /* Small animation for buttons */
   .btn {
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Ensure auth-card has proper z-index */
+  .auth-card {
+    position: relative;
+    z-index: 5;
+  }
+
+  /* Ensure links are clickable */
+  a {
+    position: relative;
+    z-index: 10;
   }
 
   /* Info text styling */

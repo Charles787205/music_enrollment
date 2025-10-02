@@ -21,6 +21,7 @@ class AdminController extends Controller
             'total_users' => User::count(),
             'total_students' => User::where('user_type', 'student')->count(),
             'total_employees' => User::where('user_type', 'employee')->count(),
+            'pending_users' => User::where('is_approved', false)->whereIn('user_type', ['admin', 'employee'])->count(),
             'total_courses' => Course::count(),
             'active_courses' => Course::where('status', 'active')->count(),
             'total_instruments' => Instrument::count(),
@@ -460,5 +461,60 @@ class AdminController extends Controller
     public function instruments()
     {
         return redirect()->route('instruments.index');
+    }
+
+    /**
+     * Show pending user approvals.
+     */
+    public function pendingUsers()
+    {
+        $pendingUsers = User::where('is_approved', false)
+            ->whereIn('user_type', ['admin', 'employee'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
+        return view('admin.pending-users', compact('pendingUsers'));
+    }
+
+    /**
+     * Approve a user.
+     */
+    public function approveUser(User $user)
+    {
+        if ($user->is_approved) {
+            return back()->with('warning', 'User is already approved.');
+        }
+
+        if (!in_array($user->user_type, ['admin', 'employee'])) {
+            return back()->with('error', 'Only admin and employee accounts require approval.');
+        }
+
+        $user->update([
+            'is_approved' => true,
+            'approved_at' => now(),
+            'approved_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', "User {$user->name} has been approved successfully.");
+    }
+
+    /**
+     * Reject a user.
+     */
+    public function rejectUser(User $user)
+    {
+        if ($user->is_approved) {
+            return back()->with('warning', 'Cannot reject an already approved user.');
+        }
+
+        if (!in_array($user->user_type, ['admin', 'employee'])) {
+            return back()->with('error', 'Only admin and employee accounts require approval.');
+        }
+
+        // Delete the user instead of just marking as rejected
+        $userName = $user->name;
+        $user->delete();
+
+        return back()->with('success', "User registration for {$userName} has been rejected and removed.");
     }
 }

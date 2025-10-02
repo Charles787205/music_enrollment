@@ -29,6 +29,9 @@ class User extends Authenticatable
         'user_type',
         'is_enrolled',
         'password_change_required',
+        'is_approved',
+        'approved_at',
+        'approved_by',
     ];
 
     /**
@@ -53,6 +56,8 @@ class User extends Authenticatable
             'password' => 'hashed',
             'date_of_birth' => 'date',
             'is_enrolled' => 'boolean',
+            'is_approved' => 'boolean',
+            'approved_at' => 'datetime',
         ];
     }
 
@@ -195,5 +200,37 @@ class User extends Authenticatable
     public function hasStaffAccess()
     {
         return in_array($this->user_type, ['admin', 'employee']);
+    }
+
+    /**
+     * Get the user who approved this account.
+     */
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * Get the users this user has approved.
+     */
+    public function approvedUsers()
+    {
+        return $this->hasMany(User::class, 'approved_by');
+    }
+
+    /**
+     * Check if the user account is approved.
+     */
+    public function isApproved()
+    {
+        return $this->is_approved;
+    }
+
+    /**
+     * Check if this is the first admin (for initial setup).
+     */
+    public static function hasAdmins()
+    {
+        return self::where('user_type', 'admin')->where('is_approved', true)->exists();
     }
 }

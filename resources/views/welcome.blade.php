@@ -281,7 +281,7 @@
                                 <i class="fas fa-music me-2"></i>
                                 Start Learning Today
                             </a>
-                            <a href="{{ route('instruments.index') }}" class="btn cta-button cta-secondary">
+                            <a href="{{ route('courses.index') }}" class="btn cta-button cta-secondary">
                                 <i class="fas fa-eye me-2"></i>
                                 Browse Courses
                             </a>
@@ -2118,9 +2118,9 @@ syntax: "<length>";
                     Log in
                 </a>
 
-                <a href="{{ route('register') }}"
+                <a href="{{ route('staff.register') }}"
                     class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
-                    Register
+                    Staff Register
                 </a>
                 @endauth
             </nav>

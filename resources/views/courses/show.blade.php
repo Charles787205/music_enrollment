@@ -48,7 +48,7 @@
         <div class="d-flex justify-content-between align-items-start mb-3">
           <h1 class="course-title">{{ $course->title }}</h1>
 
-          @if(auth()->user()->hasStaffAccess())
+          @if(auth()->check() && auth()->user()->hasStaffAccess())
           <div class="dropdown">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
               <i class="bi bi-three-dots"></i>
@@ -80,7 +80,7 @@
           <p>{{ $course->description }}</p>
         </div>
 
-        @if($course->enrolledStudents->count() > 0 && auth()->user()->hasStaffAccess())
+        @if($course->enrolledStudents->count() > 0 && auth()->check() && auth()->user()->hasStaffAccess())
         <div class="enrolled-students mt-4">
           <h4>Enrolled Students ({{ $course->enrolledStudents->count() }})</h4>
           <div class="row g-3">
@@ -144,7 +144,7 @@
               </small>
             </div>
 
-            @if(auth()->user()->isStudent())
+            @if(auth()->check() && auth()->user()->isStudent())
             @if($isEnrolled)
             <form action="{{ route('courses.unenroll', $course) }}" method="POST">
               @csrf

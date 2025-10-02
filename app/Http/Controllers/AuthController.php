@@ -13,8 +13,13 @@ class AuthController extends Controller
     /**
      * Show the login form.
      */
-    public function showLogin()
+    public function showLogin(Request $request)
     {
+        // Store the intended URL if provided
+        if ($request->has('redirect')) {
+            $request->session()->put('url.intended', $request->get('redirect'));
+        }
+        
         return view('auth.login');
     }
 
@@ -32,6 +37,14 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
+            
+            // Check if staff account is approved (admins and employees only)
+            if (in_array($user->user_type, ['admin', 'employee']) && !$user->is_approved) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Your account is pending approval. Please contact an administrator.',
+                ])->onlyInput('email');
+            }
             
             // Check if user needs to change password
             if ($user->password_change_required) {
@@ -60,55 +73,6 @@ class AuthController extends Controller
     /**
      * Show the registration form.
      */
-    public function showRegister()
-    {
-        return view('auth.register');
-    }
-
-    /**
-     * Handle registration request.
-     */
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'date_of_birth' => ['nullable', 'date', 'before:today'],
-            'address' => ['nullable', 'string'],
-            'emergency_contact_name' => ['nullable', 'string', 'max:255'],
-            'emergency_contact_phone' => ['nullable', 'string', 'max:20'],
-            'user_type' => ['required', Rule::in(['student', 'employee', 'admin'])],
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' => $request->phone,
-            'date_of_birth' => $request->date_of_birth,
-            'address' => $request->address,
-            'emergency_contact_name' => $request->emergency_contact_name,
-            'emergency_contact_phone' => $request->emergency_contact_phone,
-            'user_type' => $request->user_type,
-            'is_enrolled' => false,
-        ]);
-
-        Auth::login($user);
-
-        // Redirect based on user role
-        if ($user->isAdmin()) {
-            return redirect(route('admin.dashboard'))
-                ->with('success', 'Registration successful! Welcome to the admin dashboard.');
-        } elseif ($user->isEmployee()) {
-            return redirect(route('employee.dashboard'))
-                ->with('success', 'Registration successful! Welcome to the employee dashboard.');
-        } else {
-            return redirect(route('courses.index'))
-                ->with('success', 'Registration successful! Welcome to the music school.');
-        }
-    }
 
     /**
      * Handle logout request.
@@ -122,5 +86,53 @@ class AuthController extends Controller
 
         return redirect(route('login'))
             ->with('success', 'You have been logged out successfully.');
+    }
+
+    /**
+     * Show the staff registration form.
+     */
+    public function showStaffRegister()
+    {
+        return view('auth.staff-register');
+    }
+
+    /**
+     * Handle staff registration request.
+     */
+    public function staffRegister(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'user_type' => ['required', 'in:admin,employee'],
+        ]);
+
+        // Check if this is the first admin (no approved admins exist)
+        $isFirstAdmin = !User::hasAdmins() && $request->user_type === 'admin';
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'user_type' => $request->user_type,
+            'is_enrolled' => false,
+            'is_approved' => $isFirstAdmin, // Auto-approve first admin
+            'approved_at' => $isFirstAdmin ? now() : null,
+            'approved_by' => null, // First admin doesn't need an approver
+        ]);
+
+        if ($isFirstAdmin) {
+            // Auto-login the first admin
+            Auth::login($user);
+            return redirect()->route('admin.dashboard')
+                ->with('success', 'Welcome! You are now the first administrator of the music school.');
+        } else {
+            // Require approval for subsequent registrations
+            return redirect()->route('login')
+                ->with('info', 'Registration successful! Your account is pending approval from an administrator. You will receive notification once approved.');
+        }
     }
 }

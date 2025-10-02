@@ -39,6 +39,8 @@
         radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
         radial-gradient(circle at 40% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
       animation: particles 20s linear infinite;
+      z-index: -1;
+      pointer-events: none;
     }
 
     @keyframes particles {
@@ -66,6 +68,8 @@
       background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask-composite: exclude;
+      z-index: -1;
+      pointer-events: none;
     }
 
     /* Enhanced focus states */

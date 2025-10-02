@@ -454,6 +454,19 @@
                     <span class="nav-text">Manage Users</span>
                 </a>
 
+                <a href="{{ route('admin.pending-users') }}"
+                    class="nav-link {{ request()->routeIs('admin.pending-users') ? 'active' : '' }}">
+                    <div class="nav-icon">
+                        <i class="bi bi-clock-history"></i>
+                        @if(App\Models\User::where('is_approved', false)->whereIn('user_type', ['admin',
+                        'employee'])->count() > 0)
+                        <span
+                            class="nav-badge">{{ App\Models\User::where('is_approved', false)->whereIn('user_type', ['admin', 'employee'])->count() }}</span>
+                        @endif
+                    </div>
+                    <span class="nav-text">Pending Approvals</span>
+                </a>
+
                 <a href="{{ route('admin.courses') }}"
                     class="nav-link {{ request()->routeIs('admin.courses*') ? 'active' : '' }}">
                     <div class="nav-icon">

@@ -30,8 +30,11 @@ Route::get('/', function () {
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+
+// Staff Registration Routes (Admin and Employee only)
+Route::get('/staff-register', [AuthController::class, 'showStaffRegister'])->name('staff.register');
+Route::post('/staff-register', [AuthController::class, 'staffRegister'])->name('staff.register.store');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Password Change Routes (for authenticated users)
@@ -48,6 +51,15 @@ Route::get('/enroll', [GuestEnrollmentController::class, 'create'])->name('guest
 Route::get('/enroll/{course}', [GuestEnrollmentController::class, 'create'])->name('guest.enroll.course');
 Route::post('/enroll', [GuestEnrollmentController::class, 'store'])->name('guest.enroll.store');
 Route::get('/enrollment-success', [GuestEnrollmentController::class, 'success'])->name('guest.enroll.success');
+
+// Course enrollment choice route (public)
+Route::get('/courses/{course}/enroll-choice', [CourseController::class, 'enrollChoice'])->name('courses.enroll-choice');
+
+// Public course browsing routes
+Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+
+// Protected routes (require authentication)
 
 // Admin instrument management routes (must be BEFORE parameterized routes)
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -70,6 +82,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
     Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
+    
+    // User Approval Management
+    Route::get('/pending-users', [AdminController::class, 'pendingUsers'])->name('pending-users');
+    Route::post('/users/{user}/approve', [AdminController::class, 'approveUser'])->name('users.approve');
+    Route::post('/users/{user}/reject', [AdminController::class, 'rejectUser'])->name('users.reject');
     
     // Enrollment Management
     Route::get('/enrollments', [AdminController::class, 'enrollments'])->name('enrollments');
@@ -120,8 +137,14 @@ Route::middleware(['auth', 'employee'])->prefix('employee')->name('employee.')->
 
 // Protected routes (require authentication)
 Route::middleware(['auth'])->group(function () {
-    // Course routes - for course enrollment
-    Route::resource('courses', CourseController::class);
+    // Course management routes (create, edit, delete) - for staff only
+    Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
+    Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+    Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
+    Route::put('/courses/{course}', [CourseController::class, 'update'])->name('courses.update');
+    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    
+    // Course enrollment actions - for students
     Route::post('/courses/{course}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
     Route::delete('/courses/{course}/unenroll', [CourseController::class, 'unenroll'])->name('courses.unenroll');
     

@@ -142,6 +142,26 @@ class CourseController extends Controller
     }
 
     /**
+     * Show enrollment choice page for course
+     */
+    public function enrollChoice(Course $course)
+    {
+        // If already authenticated, redirect based on user type
+        if (auth()->check()) {
+            $user = auth()->user();
+            if ($user->isStudent()) {
+                return redirect()->route('courses.show', $course);
+            } else {
+                return redirect()->route('courses.show', $course)
+                    ->with('info', 'Only students can enroll in courses.');
+            }
+        }
+
+        // Show choice page for guests
+        return view('courses.enroll-choice', compact('course'));
+    }
+
+    /**
      * Enroll user in course
      */
     public function enroll(Course $course)
