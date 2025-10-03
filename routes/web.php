@@ -95,6 +95,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     // Course Enrollment Management
     Route::get('/course-enrollments', [AdminController::class, 'courseEnrollments'])->name('course-enrollments');
+    Route::get('/course-enrollments/{courseEnrollment}', [AdminController::class, 'showCourseEnrollment'])->name('course-enrollments.show');
     Route::patch('/course-enrollments/{courseEnrollment}/status', [AdminController::class, 'updateCourseEnrollmentStatus'])->name('course-enrollments.update-status');
     
     // Course Management

@@ -21,7 +21,7 @@
             <select class="form-select" id="status" name="status">
               <option value="">All Statuses</option>
               <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-              <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+              <option value="enrolled" {{ request('status') == 'enrolled' ? 'selected' : '' }}>Enrolled</option>
               <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
               <option value="dropped" {{ request('status') == 'dropped' ? 'selected' : '' }}>Dropped</option>
             </select>
@@ -79,35 +79,34 @@
                 </td>
                 <td>{{ $enrollment->course->teacher->name ?? 'No Teacher' }}</td>
                 <td>
-                  <form method="POST" action="{{ route('admin.course-enrollments.update-status', $enrollment) }}"
-                    class="d-inline">
-                    @csrf
-                    @method('PATCH')
-                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-                      <option value="pending" {{ $enrollment->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                      <option value="active" {{ $enrollment->status === 'active' ? 'selected' : '' }}>Active</option>
-                      <option value="completed" {{ $enrollment->status === 'completed' ? 'selected' : '' }}>Completed</option>
-                      <option value="dropped" {{ $enrollment->status === 'dropped' ? 'selected' : '' }}>Dropped</option>
-                    </select>
-                  </form>
+                  @if($enrollment->status === 'pending')
+                  <span class="badge bg-warning">Pending</span>
+                  @elseif($enrollment->status === 'enrolled')
+                  <span class="badge bg-success">Enrolled</span>
+                  @elseif($enrollment->status === 'completed')
+                  <span class="badge bg-primary">Completed</span>
+                  @elseif($enrollment->status === 'dropped')
+                  <span class="badge bg-danger">Dropped</span>
+                  @endif
                 </td>
                 <td>{{ $enrollment->enrolled_at ? $enrollment->enrolled_at->format('M d, Y') : 'N/A' }}</td>
                 <td>{{ $enrollment->completed_at ? $enrollment->completed_at->format('M d, Y') : 'N/A' }}</td>
                 <td>
                   @if($enrollment->payment_status === 'paid')
-                    <span class="badge bg-success">Paid</span>
+                  <span class="badge bg-success">Paid</span>
                   @elseif($enrollment->payment_status === 'pending')
-                    <span class="badge bg-warning">Pending</span>
+                  <span class="badge bg-warning">Pending</span>
                   @elseif($enrollment->payment_status === 'overdue')
-                    <span class="badge bg-danger">Overdue</span>
+                  <span class="badge bg-danger">Overdue</span>
                   @else
-                    <span class="badge bg-secondary">Unpaid</span>
+                  <span class="badge bg-secondary">Unpaid</span>
                   @endif
                 </td>
                 <td>{{ $enrollment->grade ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group" role="group">
-                    <a href="{{ route('course-enrollments.show', $enrollment) }}" class="btn btn-sm btn-outline-primary">
+                    <a href="{{ route('admin.course-enrollments.show', $enrollment) }}"
+                      class="btn btn-sm btn-outline-primary">
                       <i class="bi bi-eye"></i> View
                     </a>
                     <a href="{{ route('admin.users.show', $enrollment->user) }}" class="btn btn-sm btn-outline-info">

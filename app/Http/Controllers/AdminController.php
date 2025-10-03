@@ -220,7 +220,7 @@ class AdminController extends Controller
     public function updateCourseEnrollmentStatus(Request $request, CourseEnrollment $courseEnrollment)
     {
         $request->validate([
-            'status' => ['required', 'in:pending,active,completed,dropped'],
+            'status' => ['required', 'in:pending,enrolled,completed,dropped'],
         ]);
 
         $oldStatus = $courseEnrollment->status;
@@ -228,15 +228,25 @@ class AdminController extends Controller
 
         $updateData = ['status' => $newStatus];
 
-        if ($newStatus === 'active' && $oldStatus === 'pending') {
+        if ($newStatus === 'enrolled' && $oldStatus === 'pending') {
             $updateData['enrolled_at'] = now();
-        } elseif ($newStatus === 'completed' && $oldStatus === 'active') {
+        } elseif ($newStatus === 'completed' && $oldStatus === 'enrolled') {
             $updateData['completed_at'] = now();
         }
 
         $courseEnrollment->update($updateData);
 
         return back()->with('success', 'Course enrollment status updated successfully.');
+    }
+
+    /**
+     * Show a specific course enrollment.
+     */
+    public function showCourseEnrollment(CourseEnrollment $courseEnrollment)
+    {
+        $courseEnrollment->load(['user', 'course.teacher']);
+        
+        return view('admin.course_enrollments.show', compact('courseEnrollment'));
     }
 
     /**

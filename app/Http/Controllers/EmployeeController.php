@@ -184,7 +184,7 @@ class EmployeeController extends Controller
     public function updateCourseEnrollmentStatus(Request $request, CourseEnrollment $courseEnrollment)
     {
         $request->validate([
-            'status' => ['required', 'in:pending,approved,rejected,completed'],
+            'status' => ['required', 'in:pending,enrolled,completed,dropped'],
         ]);
 
         $oldStatus = $courseEnrollment->status;
@@ -194,9 +194,9 @@ class EmployeeController extends Controller
         $updateData = ['status' => $newStatus];
 
         // Set appropriate timestamps based on status transitions
-        if ($newStatus === 'approved' && $oldStatus === 'pending') {
-            $updateData['approved_at'] = now();
-        } elseif ($newStatus === 'completed' && in_array($oldStatus, ['approved'])) {
+        if ($newStatus === 'enrolled' && $oldStatus === 'pending') {
+            $updateData['enrolled_at'] = now();
+        } elseif ($newStatus === 'completed' && $oldStatus === 'enrolled') {
             $updateData['completed_at'] = now();
         }
 

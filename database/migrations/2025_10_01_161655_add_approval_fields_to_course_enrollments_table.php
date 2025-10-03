@@ -15,8 +15,8 @@ return new class extends Migration
             // Add approved_at timestamp field
             $table->timestamp('approved_at')->nullable()->after('enrolled_at');
             
-            // Update status enum to include approval statuses
-            $table->enum('status', ['pending', 'enrolled', 'approved', 'rejected', 'completed', 'dropped'])->default('pending')->change();
+            // Update status enum to only use the core statuses
+            $table->enum('status', ['pending', 'enrolled', 'completed', 'dropped'])->default('pending')->change();
         });
     }
 
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->dropColumn('approved_at');
             
             // Revert status enum to original values
-            $table->enum('status', ['enrolled', 'completed', 'dropped', 'pending'])->default('enrolled')->change();
+            $table->enum('status', ['pending', 'enrolled', 'completed', 'dropped'])->default('pending')->change();
         });
     }
 };
