@@ -18,7 +18,7 @@
           <!-- Welcome Text -->
           <div class="text-center mb-4">
             <h2 class="fw-bold mb-2" style="color: #2d3748;">Staff Registration</h2>
-            <p class="text-muted">Join our music school team</p>
+            <p class="text-muted">Join the Muzic's Kool team</p>
             @if(!App\Models\User::hasAdmins())
             <div class="alert alert-info">
               <i class="bi bi-info-circle me-2"></i>

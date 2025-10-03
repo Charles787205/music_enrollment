@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Music Enrollment System') }}</title>
+    <title>{{ config('app.name', 'Muzic\'s Kool') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -382,7 +382,7 @@
             <div class="sidebar-logo">
                 <i class="bi bi-music-note-beamed"></i>
             </div>
-            <div class="sidebar-title">Music School</div>
+            <div class="sidebar-title">Muzic's Kool</div>
         </div>
 
         <nav class="sidebar-nav">
@@ -483,12 +483,12 @@
                     <span class="nav-text">Manage Teachers</span>
                 </a>
 
-                <a href="{{ route('admin.enrollments') }}"
-                    class="nav-link {{ request()->routeIs('admin.enrollments') ? 'active' : '' }}">
+                <a href="{{ route('admin.course-enrollments') }}"
+                    class="nav-link {{ request()->routeIs('admin.course-enrollments.*') ? 'active' : '' }}">
                     <div class="nav-icon">
                         <i class="bi bi-clipboard-data"></i>
                     </div>
-                    <span class="nav-text">Enrollments</span>
+                    <span class="nav-text">Course Enrollments</span>
                 </a>
 
                 <a href="{{ route('instruments.create') }}"

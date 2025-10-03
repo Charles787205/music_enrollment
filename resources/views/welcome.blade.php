@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Music School') }} - Welcome</title>
+    <title>{{ config('app.name', 'Muzic\'s Kool') }} - Welcome</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -341,7 +341,7 @@
         <div class="container">
             <div class="row text-center mb-5">
                 <div class="col-lg-8 mx-auto">
-                    <h2 class="display-5 fw-bold mb-3">Why Choose Our Music School?</h2>
+                    <h2 class="display-5 fw-bold mb-3">Why Choose Muzic's Kool?</h2>
                     <p class="lead text-muted">We provide exceptional music education with personalized attention and
                         world-class facilities.</p>
                 </div>
@@ -514,7 +514,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mb-4">
-                    <h5 class="fw-bold mb-3">{{ config('app.name', 'Music School') }}</h5>
+                    <h5 class="fw-bold mb-3">{{ config('app.name', 'Muzic\'s Kool') }}</h5>
                     <p class="mb-3">Inspiring musical excellence and creativity in students of all ages through
                         personalized instruction and innovative teaching methods.</p>
                     <div class="social-links">
@@ -553,7 +553,7 @@
             <hr class="my-4">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="mb-0">&copy; {{ date('Y') }} {{ config('app.name', 'Music School') }}. All rights
+                    <p class="mb-0">&copy; {{ date('Y') }} {{ config('app.name', 'Muzic\'s Kool') }}. All rights
                         reserved.</p>
                 </div>
                 <div class="col-md-6 text-md-end">

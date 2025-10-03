@@ -88,10 +88,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/users/{user}/approve', [AdminController::class, 'approveUser'])->name('users.approve');
     Route::post('/users/{user}/reject', [AdminController::class, 'rejectUser'])->name('users.reject');
     
-    // Enrollment Management
+    // Enrollment Management (Instrument Borrows)
     Route::get('/enrollments', [AdminController::class, 'enrollments'])->name('enrollments');
     Route::get('/enrollments/{enrollment}', [AdminController::class, 'showEnrollment'])->name('enrollments.show');
     Route::patch('/enrollments/{enrollment}/status', [AdminController::class, 'updateEnrollmentStatus'])->name('enrollments.update-status');
+    
+    // Course Enrollment Management
+    Route::get('/course-enrollments', [AdminController::class, 'courseEnrollments'])->name('course-enrollments');
+    Route::patch('/course-enrollments/{courseEnrollment}/status', [AdminController::class, 'updateCourseEnrollmentStatus'])->name('course-enrollments.update-status');
     
     // Course Management
     Route::get('/courses', [AdminController::class, 'courses'])->name('courses');

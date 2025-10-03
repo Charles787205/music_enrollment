@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>@yield('title', 'Music School') - {{ config('app.name', 'Music Enrollment System') }}</title>
+  <title>@yield('title', 'Muzic\'s Kool') - {{ config('app.name', 'Muzic\'s Kool') }}</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.bunny.net">

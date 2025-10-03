@@ -18,7 +18,7 @@
           <!-- Welcome Text -->
           <div class="text-center mb-4">
             <h2 class="fw-bold mb-2" style="color: #2d3748;">Welcome Back</h2>
-            <p class="text-muted">Sign in to your Music School account</p>
+            <p class="text-muted">Sign in to your Muzic's Kool account</p>
           </div>
 
           <!-- Login Form -->
@@ -70,7 +70,7 @@
 
           <!-- Register Link -->
           <div class="text-center mt-4 pt-3 border-top">
-            <p class="text-muted mb-3">Welcome to our Music School!</p>
+            <p class="text-muted mb-3">Welcome to Muzic's Kool!</p>
 
             <!-- Quick Action Buttons -->
             <div class="row g-2 mb-3">
