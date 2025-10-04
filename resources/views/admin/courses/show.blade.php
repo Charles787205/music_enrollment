@@ -136,19 +136,12 @@
                 @endforeach
               </select>
             </div>
-            <div class="col-md-2">
-              <label for="status" class="form-label">Status</label>
-              <select class="form-select" id="status" name="status" required>
-                <option value="pending">Pending</option>
-                <option value="active">Active</option>
-              </select>
-            </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
               <label for="total_fee" class="form-label">Total Fee</label>
               <input type="number" class="form-control" id="total_fee" name="total_fee" value="{{ $course->fee }}"
                 step="0.01" min="0" required>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
               <label for="payment_due_date" class="form-label">Payment Due</label>
               <input type="date" class="form-control" id="payment_due_date" name="payment_due_date"
                 value="{{ now()->addDays(30)->format('Y-m-d') }}">

@@ -318,7 +318,6 @@ class AdminController extends Controller
     {
         $request->validate([
             'student_id' => 'required|exists:users,id',
-            'status' => 'required|in:pending,active,completed,dropped',
             'total_fee' => 'required|numeric|min:0',
             'payment_due_date' => 'nullable|date|after_or_equal:today',
         ]);
@@ -338,12 +337,12 @@ class AdminController extends Controller
             return back()->with('error', 'Student is already enrolled in this course.');
         }
 
-        // Create the enrollment
+        // Create the enrollment with default pending status
         CourseEnrollment::create([
             'user_id' => $student->id,
             'course_id' => $course->id,
             'teacher_id' => $course->teacher_id,
-            'status' => $request->status,
+            'status' => 'pending', // Default status
             'total_fee' => $request->total_fee,
             'amount_paid' => 0,
             'payment_status' => 'pending',
